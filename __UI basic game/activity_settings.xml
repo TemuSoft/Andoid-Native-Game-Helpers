@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main"
+    tools:context=".SettingsActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/settings"
+        android:theme="@style/buttonTheme"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/sound"
+                android:textSize="21dp"
+                android:theme="@style/buttonTheme"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/sound_on"
+                android:layout_marginLeft="20dp"
+                android:layout_width="50dp"
+                android:layout_height="45dp"
+                android:background="@drawable/on"
+                android:theme="@style/textTheme"
+                android:textColor="@color/green"
+                android:text="@string/on"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/sound_off"
+                android:layout_marginLeft="30dp"
+                android:layout_width="50dp"
+                android:layout_height="45dp"
+                android:background="@drawable/off"
+                android:theme="@style/textTheme"
+                android:text="@string/off"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="70dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/music"
+                android:textSize="21dp"
+                android:theme="@style/buttonTheme"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/music_on"
+                android:layout_marginLeft="20dp"
+                android:layout_width="50dp"
+                android:layout_height="45dp"
+                android:background="@drawable/on"
+                android:theme="@style/textTheme"
+                android:textColor="@color/green"
+                android:text="@string/on"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/music_off"
+                android:layout_marginLeft="30dp"
+                android:layout_width="50dp"
+                android:layout_height="45dp"
+                android:background="@drawable/off"
+                android:theme="@style/textTheme"
+                android:text="@string/off"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="70dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/vibration"
+                android:textSize="21dp"
+                android:theme="@style/buttonTheme"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/vibration_on"
+                android:layout_marginLeft="20dp"
+                android:layout_width="50dp"
+                android:layout_height="45dp"
+                android:background="@drawable/on"
+                android:theme="@style/textTheme"
+                android:textColor="@color/green"
+                android:text="@string/on"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/vibration_off"
+                android:layout_marginLeft="30dp"
+                android:layout_width="50dp"
+                android:layout_height="45dp"
+                android:background="@drawable/off"
+                android:theme="@style/textTheme"
+                android:text="@string/off"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_marginTop="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/back"
+        app:layout_constraintVertical_bias="0.95"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

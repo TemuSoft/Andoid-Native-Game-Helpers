@@ -1,0 +1,274 @@
+  private Path getEllipseBar(int width, int height, int initX, int initY) {
+        Path path = new Path();
+        path.moveTo(initX, initY);
+
+        initX += width;
+        path.lineTo(initX, initY);
+        for (int i = 0; i < 180; i += 10) {
+            int xy[] = xyPrimePoint(initX, initY, i, initX, initY + height / 2);
+            path.lineTo(xy[0], xy[1]);
+        }
+        initY = initY  + height;
+        path.lineTo(initX, initY);
+
+        initX -= width;
+        path.lineTo(initX, initY);
+
+        for (int i = 0; i < 180; i += 10) {
+            int xy[] = xyPrimePoint(initX, initY, i, initX, initY - height / 2);
+            path.lineTo(xy[0], xy[1]);
+        }
+
+        initY = initY - height;
+        path.lineTo(initX, initY);
+
+        return path;
+    }
+	
+	
+    private Path arrayList_to_Path(ArrayList<ArrayList<Integer>> all_points) {
+        Path path = new Path();
+
+        for (int i = 0; i < all_points.size(); i++) {
+            int x = all_points.get(i).get(0);
+            int y = all_points.get(i).get(1);
+            
+            if (i == 0)
+                path.moveTo(x, y);
+            else 
+                path.lineTo(x, y);
+        }
+        
+        return path;
+    }
+
+	
+
+    public int[] xyPrimePoint(int x, int y, int angle, int cx, int cy){
+        double radians = Math.toRadians(angle);
+
+        int x1 = x - cx;
+        int y1 = y - cy;
+        int x2 = (int) (x1 * Math.cos(radians) - y1 * Math.sin(radians));
+        int y2 = (int) (x1 * Math.sin(radians) + y1 * Math.cos(radians));
+
+        x = x2 + cx;
+        y = y2 + cy;
+
+        return new int[]{x, y};
+    }
+
+
+    private boolean path_object_intersection(Path path, Rect object) {
+        boolean path_object_intersection = false;
+        PathMeasure pm = new PathMeasure(path, false);
+        float distance = 0f;
+        float speed = pm.getLength() / 100;
+        float[] aCoordinates = new float[2];
+
+        while (distance < pm.getLength()){
+            pm.getPosTan(distance, aCoordinates, null);
+            int xc = (int) aCoordinates[0];
+            int yc = (int) aCoordinates[1];
+
+            Rect rect = new Rect(xc, yc, xc, yc);
+            if (Rect.intersects(rect, object)){
+                path_object_intersection = true;
+                break;
+            }
+            distance = distance + speed;
+        }
+
+        return path_object_intersection;
+    }
+	
+	private boolean two_path_intersection(Path path1, Path path2) {
+        Region region1 = new Region();
+        Region region2 = new Region();
+        boolean intersect;
+
+        Region clip = new Region(0, 0, screenX, screenY);
+        region1.setPath(path1, clip);
+        region2.setPath(path2, clip);
+
+        if (!region1.quickReject(region2))
+            intersect = true;
+        else intersect = false;
+
+        return intersect;
+    }
+	
+	int angle = (int) Math.toDegrees(Math.atan2(cx - bg.pX, bg.pY - cy)) - 90;
+	
+	
+	
+    private boolean path_path_intersection(Path path1, Path path2) {
+        boolean path_object_intersection = false;
+        PathMeasure pm = new PathMeasure(path1, false);
+        float distance = 0f;
+        float speed = pm.getLength() / 100;
+        float[] aCoordinates = new float[2];
+
+        while (distance < pm.getLength()){
+            pm.getPosTan(distance, aCoordinates, null);
+            int xc = (int) aCoordinates[0];
+            int yc = (int) aCoordinates[1];
+
+            Rect rect = new Rect(xc, yc, xc, yc);
+            PathMeasure pm2 = new PathMeasure(path2, false);
+            float distance2 = 0f;
+            float speed2 = pm2.getLength() / 20;
+            float[] aCoordinates2 = new float[2];
+
+            if (path_object_intersection)
+                break;
+
+            while (distance2 < pm2.getLength()){
+                pm2.getPosTan(distance2, aCoordinates2, null);
+                int xc2 = (int) aCoordinates2[0];
+                int yc2 = (int) aCoordinates2[1];
+
+                Rect rect2 = new Rect(xc2, yc2, xc2, yc2);
+                if (Rect.intersects(rect, rect2)){
+                    path_object_intersection = true;
+                    break;
+                }
+                distance2 = distance2 + speed2;
+            }
+            distance = distance + speed;
+        }
+
+        return path_object_intersection;
+    }
+	
+	
+	
+	int sx = bg.line_data.get(i * 2).get(0);
+                    int sy = bg.line_data.get(i * 2).get(1);
+                    int ex = bg.line_data.get(i * 2 + 1).get(0);
+                    int ey = bg.line_data.get(i * 2 + 1).get(1);
+
+                    if (last_time_checked + 200 > System.currentTimeMillis())
+                        break;
+
+                    int xy[] = bg.path_object_intersectionXY(all_path.get(i), bg.getBallCollision());
+
+//                    no collision happened between line and ball
+                    if (xy[0] == -1)
+                        continue;
+
+                    last_time_checked = System.currentTimeMillis();
+
+                    int angle = (int) Math.toDegrees(Math.atan2(ex - sx, sy - ey)) + 90;
+                    double ballSpeedX = bg.xSpeed * bg.move_left;
+                    double ballSpeedY = bg.ySpeed * bg.move_up;
+                    double wallAngle = Math.toRadians(angle);
+                    double[] newSpeeds = calculateBounce(ballSpeedX, ballSpeedY, wallAngle);
+
+                    bg.xSpeed = (float) newSpeeds[0];
+                    bg.ySpeed = (float) newSpeeds[1];
+
+                    bg.move_left = 1;
+                    bg.move_up = 1;
+
+                    if (bg.xSpeed < 0)
+                        bg.move_left = -1;
+
+                    if (bg.ySpeed < 0)
+                        bg.move_up = -1;
+
+                    bg.xSpeed = Math.abs(bg.xSpeed);
+                    bg.ySpeed = Math.abs(bg.ySpeed);
+
+                    bg.last_bounce_X = xy[0];
+                    bg.last_bounce_Y = xy[1];
+					
+					
+					private static double[] calculateBounce(double ballSpeedX, double ballSpeedY, double wallAngle) {
+        double incidentAngle = Math.atan2(ballSpeedY, ballSpeedX);
+        double reflectionAngle = 2 * wallAngle - incidentAngle;
+        double newSpeedMagnitude = Math.sqrt(ballSpeedX * ballSpeedX + ballSpeedY * ballSpeedY);
+        double[] newSpeeds = {
+                newSpeedMagnitude * Math.cos(reflectionAngle),
+                newSpeedMagnitude * Math.sin(reflectionAngle)
+        };
+
+        return newSpeeds;
+    }
+	
+	
+	int stone = getResources().getIdentifier("stone_" + index, "drawable", getPackageName());
+
+                    Drawable drawable = ContextCompat.getDrawable(this, stone);
+                    int imageWidth = drawable != null ? drawable.getIntrinsicWidth() : 0;
+                    int imageHeight = drawable != null ? drawable.getIntrinsicHeight() : 0;
+					
+					
+private void shareImage() {
+        // Assuming 'imageUri' is the URI of your image file
+        Uri imageUri = Uri.parse("android.resource://" + getPackageName() + "/" + images_full[selected_image_index]);
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+
+        // Optionally, you can add a subject and text
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Shared Image");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "Image from Space Puzzle Game (Level " + (playLevel + 1) + ")");
+
+        startActivityForResult(Intent.createChooser(shareIntent, "Share Image"), REQUEST_CODE);
+    }
+	
+public float calculateRotationAngle(int x, int y , int x1, int y1) {
+        // Calculate the angle between the lines from center to point1 and center to point2
+        float angle1 = (float) Math.atan2(y - gameView.cy, x - gameView.cx);
+        float angle2 = (float) Math.atan2(y1 - gameView.cy, x1 - gameView.cx);
+
+        // Calculate the angle difference
+        float angleDiff = angle2 - angle1;
+
+        // Convert the angle difference to degrees
+        float degrees = (float) Math.toDegrees(angleDiff);
+
+        // Ensure the angle is in the range [0, 360)
+        if (degrees < 0) {
+            degrees += 360;
+        }
+
+        return degrees;
+    }
+	
+	ViewGroup.LayoutParams layoutParams2 = one_stone.getLayoutParams();
+	layoutParams2.width = (int) (imageWidth * 0.7);
+	layoutParams2.height = (int) (imageHeight * 0.7);
+	
+	
+	private void reloading_UI(){
+        Runnable r = new Runnable() {
+            public void run() {
+                if (gameView.isPlaying){
+                    gameView.update();
+
+                    score.setText("" + gameView.score);
+
+                    int ss = gameView.max_time_set - 1 - (int) (System.currentTimeMillis() - start_time) / 1000;
+                    int mm = ((int) (System.currentTimeMillis() - start_time) % 1000) / 10;
+
+                    time.setText(ss + "." + mm);
+                    score.setText(gameView.taken_data.size() + "");
+
+                    if (ss <= 0 && mm <= 0)
+                        gameView.game_over = true;
+
+                    if (gameView.game_over)
+                        game_over();
+                    else if (gameView.game_won)
+                        game_won();
+
+                    if (!gameView.game_over && !gameView.game_won)
+                        reloading_UI();
+                }
+            }
+        };
+        handler.postDelayed(r, 20);
+    }
