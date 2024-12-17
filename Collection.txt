@@ -272,3 +272,14 @@ public float calculateRotationAngle(int x, int y , int x1, int y1) {
         };
         handler.postDelayed(r, 20);
     }
+	
+	
+	
+
+    public static void hide_nav_bar(Activity activity) {
+        View decorView = activity.getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
