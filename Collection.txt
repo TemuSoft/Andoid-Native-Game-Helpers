@@ -283,3 +283,55 @@ public float calculateRotationAngle(int x, int y , int x1, int y1) {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
+	
+	
+	full screen
+	
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.trans));
+		
+		
+		// candi crash gravlity
+		
+
+    private void start_animate_gravity() {
+        final Handler handler = new Handler();
+
+        Runnable gravityRunnable = new Runnable() {
+            @Override
+            public void run() {
+                boolean moved = false;
+
+                for (int i = row - 2; i >= 0; i--) {
+                    for (int j = 0; j < col; j++) {
+                        List<Long> currentCell = game_data.get(i).get(j);
+                        List<Long> belowCell = game_data.get(i + 1).get(j);
+
+                        long index = currentCell.get(3);
+                        long time = currentCell.get(4);
+                        long belowIndex = belowCell.get(3);
+                        long belowTime = belowCell.get(4);
+
+                        if ((index != -1 || time != -1) && (belowIndex == -1 && belowTime == -1)) {
+                            belowCell.set(3, index);
+                            belowCell.set(4, time);
+                            currentCell.set(3, -1L);
+                            currentCell.set(4, -1L);
+                            moved = true;
+                        }
+                    }
+                }
+
+                invalidate();
+
+                if (moved) {
+                    handler.postDelayed(this, 100);
+                } else
+                    gravity_on_animating = false;
+            }
+        };
+
+        handler.post(gravityRunnable);
+    }
