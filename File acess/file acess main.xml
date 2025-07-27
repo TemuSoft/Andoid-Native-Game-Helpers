@@ -18,17 +18,18 @@
 		
 		
 		
-        add_ticket.setOnClickListener(new View.OnClickListener() {
+        player_one_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Player.button(soundMute);
 
-                fileAccess.showImagePickerDialog();
+                fileAccess_one.showImagePickerDialog(game_two_image_0);
+                editor.putString("game_two_image_0", game_two_image_0);
+                editor.apply();
             }
         });
 		
 		
-		// use this after setContetnView
-        fileAccess = new FileAccess(this, photo);
-        fileAccess.registerLaunchers(this);
-        fileAccess.fileName = custom_bg_name;
+        fileAccess_one = new FileAccess(this);
+        fileAccess_one.registerLaunchers(this, active_player_one_photo);
+        fileAccess_one.fileName = game_one_image_0;

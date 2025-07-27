@@ -1,0 +1,18 @@
+# goood to use for bug finding i.e. Can not extract resource from com.android.aaptcompiler.ParsedResource@1af9a595.
+
+./gradlew clean
+./gradlew assembleDebug
+
+./gradlew clean
+./gradlew assembleDebug --stacktrace
+
+
+./gradlew assembleDebug --stacktrace --info
+
+NB: for the above bug finding... 
+
+Enable verbose build logs to locate the resource causing failure:
+In gradle.properties, add:
+
+android.debug.obsoleteApi=true
+android.enableAapt2=true
