@@ -1,4 +1,4 @@
-package com.yo0ur.ggamee;
+package com.CyberEgg.CE0808;
 
 import android.Manifest;
 import android.app.Activity;
@@ -252,7 +252,7 @@ public class FileAccess {
         long fileSize = returnCursor.getLong(sizeIndex);
         returnCursor.close();
 
-        if (fileSize > 1 * 1024 * 1024) { // 1 MB in bytes
+        if (fileSize > 10 * 1024 * 1024) { // 10 MB in bytes
             Toast.makeText(activity, "Image must be less than 1MB", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -267,7 +267,7 @@ public class FileAccess {
             return false;
         }
 
-        if (file.length() > 1 * 1024 * 1024) {
+        if (file.length() > 10 * 1024 * 1024) {
             Toast.makeText(activity, "Image must be less than 1MB", Toast.LENGTH_SHORT).show();
             return false;
         }
